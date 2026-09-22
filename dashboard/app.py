@@ -178,6 +178,11 @@ st.dataframe(
 )
 st.caption("Verdict REAL = model-confirmed finding · NOISE = passive / false positive")
 
+from src.report import build_report
+report_html = build_report(source, df.to_dict("records"), None, {"model": model_name})
+st.download_button("⬇ Download HTML report", report_html, file_name="security_report.html",
+                   mime="text/html", type="primary")
+
 st.divider()
 
 # --- Category breakdown ----------------------------------------------------

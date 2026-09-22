@@ -126,6 +126,19 @@ python -m scripts.run_scan
 python -m src.build_dataset data/benchmark_report.json
 ```
 
+**Closed loop — scan, triage, verify, report** (authorised targets only):
+
+```bash
+python -m scripts.scan_and_verify --target http://localhost:3000
+```
+
+Scans the target, triages the alerts with the model, then **actively verifies**
+each confirmed finding by sending a probe payload and inspecting the response
+(reflected XSS, SQL error / time delay, command-injection delay) — marking each
+CONFIRMED or UNCONFIRMED — and writes an HTML report. Verification refuses any
+non-local / non-private host unless `--allow-external` is passed with
+authorisation.
+
 ## Repository layout
 
 ```
@@ -138,9 +151,12 @@ smart-security-testing-module/
 │   ├── train.py              # model comparison + training
 │   ├── evaluate.py           # metrics, confusion matrix, SHAP, figures
 │   ├── payloads.py           # structured re-verification payloads
+│   ├── verify.py             # active verification of confirmed findings
+│   ├── report.py             # standalone HTML report generator
 │   └── mcp_server.py         # MCP server for AI-assistant triage
 ├── dashboard/app.py          # Streamlit dashboard (real model output)
 ├── scripts/run_scan.py       # memory-safe, resumable Benchmark scan
+├── scripts/scan_and_verify.py# closed loop: scan -> triage -> verify -> report
 ├── tests/                    # unit tests (labeller, features)
 ├── data/expectedresults-1.2.csv  # OWASP Benchmark answer key (public)
 ├── docker-compose.yml        # ZAP + Benchmark lab
@@ -162,8 +178,11 @@ trust:
   classification win.
 - **Single tool, single benchmark.** Trained on ZAP against OWASP Benchmark;
   generalisation to other scanners and real applications is untested.
-- **Detection only.** No automatic exploitation or blocking — payloads are
-  suggestions for a human tester, for authorised targets only.
+- **Verification is evidence-based, not exploitation.** The closed loop sends
+  benign probes (an alert marker, a timed `SLEEP`) and reads the response — it
+  never runs destructive payloads, and only against localhost / authorised
+  targets. It covers XSS, SQLi and command injection; other classes are triaged
+  but not auto-verified.
 
 ## Tech stack
 
