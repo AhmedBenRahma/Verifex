@@ -1,4 +1,4 @@
-# Smart Security Testing Module
+# Verifex
 
 **AI-assisted triage for web-application scan results.** An OWASP ZAP scan of a
 real target produces thousands of alerts, of which only a tiny fraction are real
