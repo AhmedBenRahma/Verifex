@@ -1,0 +1,12 @@
+{
+  "model": "Gradient Boosting",
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "pr_auc": 1.0,
+  "held_out_alerts": 3064,
+  "real_findings": 33,
+  "baseline_precision_review_all": 0.01077023498694517,
+  "alerts_flagged_by_model": 33,
+  "manual_review_reduction": 0.9892297650130548
+}

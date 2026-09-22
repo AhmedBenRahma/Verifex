@@ -1,0 +1,33 @@
+# Lab environment for the Smart Security Testing Module.
+#
+#   docker compose up -d --build
+#
+# Brings up:
+#   - ZAP in daemon mode with its REST API on http://localhost:8080
+#   - OWASP Benchmark (Tomcat) at http://localhost:8081/benchmark
+#
+# ZAP reaches Benchmark inside the docker network as http://benchmark:8080/benchmark/
+# (that is the scan target). The ZAP API key comes from your .env.
+services:
+  zap:
+    image: ghcr.io/zaproxy/zaproxy:stable
+    command: >
+      zap.sh -daemon -host 0.0.0.0 -port 8080
+      -config api.key=${ZAP_API_KEY}
+      -config api.addrs.addr.name=.*
+      -config api.addrs.addr.regex=true
+    ports:
+      - "8080:8080"
+    networks: [lab]
+
+  benchmark:
+    build:
+      context: ./benchmark
+    # Host 8081 -> container 8080, so you can open it in a browser too.
+    ports:
+      - "8081:8080"
+    networks: [lab]
+
+networks:
+  lab:
+    driver: bridge

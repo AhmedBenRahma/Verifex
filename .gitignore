@@ -1,0 +1,24 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Data & model artifacts (regenerate with the pipeline)
+data/*_report.json
+!data/sample_report.json
+data/raw_scans/
+models/*.pkl
+
+# Reports produced at runtime
+*.log
+alertes.csv
+flow_en_direct.csv
+
+# Keep the public answer key and placeholders
+!data/expectedresults-1.2.csv
+!models/.gitkeep
